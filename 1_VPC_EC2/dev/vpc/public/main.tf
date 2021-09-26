@@ -29,7 +29,9 @@ locals {
 
 
 module "asg_web" {
-  source = "../../../modules/aws_ec2_asg/"
+  source = "github.com/mrthehavok/terraform_modules/modules/aws_ec2_asg/"
+  des_asg_size = 1
+  max_asg_size = 2
 #  common_tags = local.common_tags
 }
 
