@@ -1,3 +1,3 @@
-output "web_loadbalancer_url" {
+output "web_LB_url" {
   value = aws_elb.web.dns_name
 }

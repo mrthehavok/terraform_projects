@@ -31,3 +31,7 @@ output "common_tags" {
       Owner     = "idmitriev"
   }
 }
+
+output "region_name" {
+  value = "eu-west-1"
+}

@@ -4,7 +4,9 @@
 #
 #------------------------------------------------------------------------------------------------
 
-provider "aws" {}
+provider "aws" {
+  region = local.region_name
+}
 
 terraform {
   backend "s3" {
@@ -25,6 +27,7 @@ data "terraform_remote_state" "global" {
 
 locals {
   company_name = data.terraform_remote_state.global.outputs.company_name
+  region_name = data.terraform_remote_state.global.outputs.region_name
   common_tags  = data.terraform_remote_state.global.outputs.common_tags
 }
 
