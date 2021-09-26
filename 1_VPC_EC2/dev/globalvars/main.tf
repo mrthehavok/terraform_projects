@@ -22,6 +22,10 @@ output "Project" {
   value = "VPC_EC2"
 }
 
+output "company_name" {
+  value = "CMP inc"
+}
+
 output "common_tags" {
   value = {
       Project   = "VPC_EC2"
