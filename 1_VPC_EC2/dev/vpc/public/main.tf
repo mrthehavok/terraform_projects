@@ -1,3 +1,9 @@
+#------------------------------------------------------------------------------------------------
+#
+#                                Create servers in public subnets
+#
+#------------------------------------------------------------------------------------------------
+
 provider "aws" {
   region = local.region_name
 }
@@ -46,6 +52,54 @@ module "asg_web" {
   min_asg_size = var.min_asg_size
   subnet_id     = local.subnets
   vpc_id        = local.vpc_id
-#  common_tags = local.common_tags
+  common_tags = local.common_tags
 }
 
+#------------------------------------------------------------------------------------------------
+
+data "aws_ami" "latest_amazon_linux" {
+  owners      = ["amazon"]
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+
+resource "aws_security_group" "bastion_host" {
+  name = "Bastion Security Group"
+  vpc_id = local.vpc_id
+  ingress {
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge (local.common_tags , {Name = "Bastion SG"})
+}
+
+
+
+module "ec2_instance" {
+  source  = "terraform-aws-modules/ec2-instance/aws"
+  version = "~> 3.0"
+
+  name = "bastion-instance"
+
+  ami                    = data.aws_ami.latest_amazon_linux.id
+  instance_type          = "t2.micro"
+  key_name               = "idmitriev-key-ireland.pem"
+  vpc_security_group_ids = [aws_security_group.bastion_host.id]
+  subnet_id              = local.subnets[0]
+
+  tags = local.common_tags
+}
