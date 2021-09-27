@@ -11,7 +11,7 @@ cat <<EOF > /var/www/html/index.html
 <h2><font color="gold">Build by Power of Terraform <font color="aqua"> v1.0.6</font></h2><br><p>
 <font color="green">Server PrivateIP: <font color="yellow">$myip<br><br>
 <font color="magenta">
-<b>Version 5.0</b>
+<b>Version 6.0</b>
 </body>
 </html>
 EOF
