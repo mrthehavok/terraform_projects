@@ -26,9 +26,10 @@ data "terraform_remote_state" "global" {
 }
 
 locals {
-  company_name = data.terraform_remote_state.global.outputs.company_name
-  region_name = data.terraform_remote_state.global.outputs.region_name
-  common_tags  = data.terraform_remote_state.global.outputs.common_tags
+  company_name  = data.terraform_remote_state.global.outputs.company_name
+  region_name   = data.terraform_remote_state.global.outputs.region_name
+  common_tags   = data.terraform_remote_state.global.outputs.common_tags
+  environment   = data.terraform_remote_state.global.outputs.env
 }
 
 #------------------------------------------------------------------------------------------------
@@ -37,7 +38,7 @@ locals {
 module "vpc_dev" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "${local.company_name}-vpc"
+  name = "${local.environment}-vpc-for-${local.company_name}"
   cidr = "10.0.0.0/16"
 
   azs             = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]

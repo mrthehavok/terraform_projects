@@ -24,6 +24,10 @@ output "company_name" {
   value = "CMP inc"
 }
 
+output "env" {
+  value = "DEV"
+}
+
 output "common_tags" {
   value = {
       Project     = "VPC_EC2"
