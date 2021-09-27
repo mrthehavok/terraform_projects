@@ -42,7 +42,7 @@ locals {
 module "asg_web" {
   source = "github.com/mrthehavok/terraform_modules/modules/aws_ec2_asg/"
   des_asg_size  = 1
-  max_asg_size  = 2
+  max_asg_size  = 4
   subnet_id     = local.subnets
   vpc_id        = local.vpc_id
 #  common_tags = local.common_tags
