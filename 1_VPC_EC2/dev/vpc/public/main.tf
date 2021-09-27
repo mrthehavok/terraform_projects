@@ -29,10 +29,11 @@ data "terraform_remote_state" "network" {
 }
 
 locals {
-  company_name = data.terraform_remote_state.global.outputs.company_name
-  region_name = data.terraform_remote_state.global.outputs.region_name
-  common_tags  = data.terraform_remote_state.global.outputs.common_tags
-  subnets = data.terraform_remote_state.network.outputs.subnet_id
+  company_name  = data.terraform_remote_state.global.outputs.company_name
+  region_name   = data.terraform_remote_state.global.outputs.region_name
+  common_tags   = data.terraform_remote_state.global.outputs.common_tags
+  subnets       = data.terraform_remote_state.network.outputs.subnet_id
+  vpc_id        = data.terraform_remote_state.network.outputs.vpc_id
 }
 
 #------------------------------------------------------------------------------------------------
@@ -40,9 +41,10 @@ locals {
 
 module "asg_web" {
   source = "github.com/mrthehavok/terraform_modules/modules/aws_ec2_asg/"
-  des_asg_size = 1
-  max_asg_size = 2
-  subnet_id=local.subnets
+  des_asg_size  = 1
+  max_asg_size  = 2
+  subnet_id     = local.subnets
+  vpc_id        = local.vpc_id
 #  common_tags = local.common_tags
 }
 
