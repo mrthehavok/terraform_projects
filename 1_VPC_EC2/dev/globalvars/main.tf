@@ -26,9 +26,10 @@ output "company_name" {
 
 output "common_tags" {
   value = {
-      Project   = "VPC_EC2"
-      Created   = "By Terraform"
-      Owner     = "idmitriev"
+      Project     = "VPC_EC2"
+      Created     = "By Terraform"
+      Owner       = "idmitriev"
+      Environment = "Development"
   }
 }
 
