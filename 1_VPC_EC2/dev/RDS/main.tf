@@ -1,6 +1,10 @@
+#------------------------------------------------------------------------------------------------
+#
+#                                       Create security group for RDS and RDS
+#
+#------------------------------------------------------------------------------------------------
+
 provider "aws" {}
-
-
 
 
 terraform {
@@ -55,22 +59,23 @@ locals {
 
 
 #------------------------------------------------------------------------------------------------
-
+#                                         Security Group for RDS
+#------------------------------------------------------------------------------------------------
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
   name        = " ${local.environment}-DB-SG"
-  description = " PostgreSQL  security group"
+  description = " ${var.engine}  security group"
   vpc_id      = local.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
     {
-      from_port   = 5432
-      to_port     = 5432
+      from_port   = var.db_port
+      to_port     = var.db_port
       protocol    = "tcp"
-      description = "PostgreSQL access from within VPC"
+      description = "${var.engine} access from within VPC"
       cidr_blocks = local.vpc_cidr_block
     },
   ]
@@ -81,14 +86,15 @@ module "security_group" {
 
 
 #------------------------------------------------------------------------------------------------
-
+#                                         RDS
+#------------------------------------------------------------------------------------------------
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 3.0"
 
 #  identifier = "${local.environment}-DB"
   identifier = "dev-db"
-  engine               = "postgres"
+  engine               = "${var.engine}"
   engine_version       = "11.10"
   family               = "postgres11" # DB parameter group
   major_engine_version = "11"         # DB option group
@@ -98,10 +104,10 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${local.environment}_PostgreSQL"
-  username = "root"
+  name     = "${local.environment}_${var.engine}"
+  username = var.db_username
   password = local.ssm_password
-  port     = "5432"
+  port     = var.db_port
 
   iam_database_authentication_enabled = true
 
@@ -111,8 +117,8 @@ module "db" {
   vpc_security_group_ids = [module.security_group.security_group_id]
 
 
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
+  maintenance_window = var.maintenance_window
+  backup_window      = var.backup_window
 
 
   tags = local.common_tags
@@ -123,11 +129,11 @@ module "db" {
   parameters = [
     {
       name = "character_set_client"
-      value = "utf8mb4"
+      value = var.character_set
     },
     {
       name = "character_set_server"
-      value = "utf8mb4"
+      value = var.character_set
     }
   ]
   # Disable creation of option group - provide an option group or default AWS default
