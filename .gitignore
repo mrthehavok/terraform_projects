@@ -35,5 +35,3 @@ override.tf.json
 *.exe
 *.lock.hcl
 .gitignore
-1_VPC_EC2/dev/vpc/public/.terraform.lock.hcl
-.gitignore
