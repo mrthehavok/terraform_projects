@@ -40,6 +40,7 @@ locals {
   common_tags   = data.terraform_remote_state.global.outputs.common_tags
   subnets       = data.terraform_remote_state.network.outputs.subnet_id
   vpc_id        = data.terraform_remote_state.network.outputs.vpc_id
+  environment   = data.terraform_remote_state.global.outputs.env
 }
 
 #------------------------------------------------------------------------------------------------
@@ -96,7 +97,7 @@ module "ec2_instance" {
   name = "bastion-instance"
 
   ami                    = data.aws_ami.latest_amazon_linux.id
-  instance_type          = "t2.micro"
+  instance_type          = (local.environment == "PROD" ? "t2.small" : "t2.mciro")
   key_name               = "idmitriev-key-ireland.pem"
   vpc_security_group_ids = [aws_security_group.bastion_host.id]
   subnet_id              = local.subnets[0]
