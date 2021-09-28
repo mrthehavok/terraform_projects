@@ -33,18 +33,20 @@ locals {
 }
 
 #------------------------------------------------------------------------------------------------
+#                                         VPC
+#------------------------------------------------------------------------------------------------
 
-
+//  All info about module you can find in https://github.com/terraform-aws-modules/terraform-aws-vpc
 module "vpc_dev" {
   source = "terraform-aws-modules/vpc/aws"
 
   name = "${local.environment}-vpc-for-${local.company_name}"
-  cidr = "10.0.0.0/16"
+  cidr = var.cidr_block
 
-  azs               = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-  private_subnets   = ["10.0.1.0/24"]
-  public_subnets    = ["10.0.11.0/24", "10.0.12.0/24", "10.0.13.0/24"]
-  database_subnets  = ["10.0.21.0/24","10.0.22.0/24"]
+  azs               = var.azs
+  private_subnets   = var.private_subnets
+  public_subnets    = var.public_subnets
+  database_subnets  = var.database_subnets
   create_database_subnet_group = false
   create_database_subnet_route_table     = true
 #  create_database_internet_gateway_route = true
