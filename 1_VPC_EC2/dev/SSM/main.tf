@@ -1,3 +1,9 @@
+#------------------------------------------------------------------------------------------------
+#
+#                                       Create password for RDS
+#
+#------------------------------------------------------------------------------------------------
+
 provider "aws" {}
 
 
@@ -18,6 +24,8 @@ data "terraform_remote_state" "global" {
   }
 }
 
+
+
 locals {
   company_name  = data.terraform_remote_state.global.outputs.company_name
   region_name   = data.terraform_remote_state.global.outputs.region_name
@@ -36,8 +44,8 @@ resource "random_string" "rds_password" {
 
 // Store Password in SSM Parameter Store
 resource "aws_ssm_parameter" "rds_password" {
-  name        = "/${local.environment}/PostgreSQL"
-  description = "Master Password for RDS PostgreSQL"
+  name        = "/${local.environment}/RDS"
+  description = "Master Password for RDS "
   type        = "SecureString"
   value       = random_string.rds_password.result
   tags        = local.common_tags
@@ -46,6 +54,6 @@ resource "aws_ssm_parameter" "rds_password" {
 
 // Get Password from SSM Parameter Store
 data "aws_ssm_parameter" "my_rds_password" {
-  name       = "/${local.environment}/PostgreSQL"
+  name       = "/${local.environment}/RDS"
   depends_on = [aws_ssm_parameter.rds_password]
 }
