@@ -97,7 +97,7 @@ module "ec2_instance" {
   name = "bastion-instance"
 
   ami                    = data.aws_ami.latest_amazon_linux.id
-  instance_type          = (local.environment == "PROD" ? "t2.small" : "t2.mciro")
+  instance_type          = (local.environment == "PROD" ? "t2.small" : "t2.micro")
   key_name               = "idmitriev-key-ireland.pem"
   vpc_security_group_ids = [aws_security_group.bastion_host.id]
   subnet_id              = local.subnets[0]
