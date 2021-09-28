@@ -1,3 +1,9 @@
+#------------------------------------------------------------------------------------------------
+#
+#                             Create users and groups for project and DB
+#
+#------------------------------------------------------------------------------------------------
+
 provider "aws" {
   region = local.region_name
 }
@@ -28,19 +34,8 @@ locals {
 
 
 #------------------------------------------------------------------------------------------------
-
-/*
-resource "aws_iam_group" "developers" {
-  name = "developers"
-  path = "/users/"
-}
-
-resource "aws_iam_group" "administrators" {
-  name = "administrators"
-  path = "/users/"
-}
-
-*/
+#                                         Users
+#------------------------------------------------------------------------------------------------
 
 module "iam_user_super" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-user"
@@ -95,8 +90,10 @@ module "iam_user_dev2" {
 }
 
 #------------------------------------------------------------------------------------------------
+#                                         Groups
+#------------------------------------------------------------------------------------------------
 
-
+// Create  group with full permissions for root user.
 module "iam_group_superadmin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "~> 4.3"
@@ -114,7 +111,7 @@ module "iam_group_superadmin" {
   ]
 }
 
-
+// Create  group with db full permissions for DBA
 module "iam_group_db_admin" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "~> 4.3"
@@ -131,7 +128,7 @@ module "iam_group_db_admin" {
     "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
   ]
 }
-
+// Create  group with db RO permissions for DB developers
 module "iam_group_db_dev" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-group-with-policies"
   version = "~> 4.3"
