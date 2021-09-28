@@ -22,3 +22,10 @@ output "subnet_id" {
   value = module.vpc_dev.public_subnets	
 }
 
+output "db_subnet_id" {
+  value = module.vpc_dev.database_subnets	
+}
+
+output "db_subnet_id" {
+  value = module.vpc_dev.database_subnets	
+}
