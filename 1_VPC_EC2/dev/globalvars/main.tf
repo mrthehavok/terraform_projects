@@ -16,10 +16,6 @@ terraform {
 
 #------------------------------------------------------------------------------------------------
 
-output "Project" {
-  value = "VPC_EC2"
-}
-
 output "company_name" {
   value = "CMP inc"
 }
