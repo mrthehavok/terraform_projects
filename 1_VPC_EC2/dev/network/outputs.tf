@@ -25,7 +25,3 @@ output "subnet_id" {
 output "db_subnet_id" {
   value = module.vpc_dev.database_subnets	
 }
-
-output "db_subnet_id" {
-  value = module.vpc_dev.database_subnets	
-}

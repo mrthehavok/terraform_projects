@@ -79,15 +79,15 @@ module "security_group" {
 }
 
 
-/*
+
 #------------------------------------------------------------------------------------------------
 
 module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 3.0"
 
-  identifier = "${locals.environment}_DB"
-
+#  identifier = "${local.environment}-DB"
+  identifier = "dev-db"
   engine               = "postgres"
   engine_version       = "11.10"
   family               = "postgres11" # DB parameter group
@@ -98,37 +98,24 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${locals.environment}-PostgreSQL"
-  username = "pg_root"
-  password = locals.ssm_password
+  name     = "${local.environment}PostgreSQL"
+  username = "root"
+  password = local.ssm_password
   port     = "5432"
 
   iam_database_authentication_enabled = true
 
-  vpc_security_group_ids = ["sg-12345678"]
+
+  multi_az               = false
+  subnet_ids             = local.db_subnet_id
+  vpc_security_group_ids = [module.security_group.security_group_id]
+
 
   maintenance_window = "Mon:00:00-Mon:03:00"
   backup_window      = "03:00-06:00"
 
-  # Enhanced Monitoring - see example for details on how to create the role
-  # by yourself, in case you don't want to create it automatically
-  monitoring_interval = "30"
-  monitoring_role_name = "MyRDSMonitoringRole"
-  create_monitoring_role = true
 
-  tags = {
-    Owner       = "user"
-    Environment = "dev"
-  }
-
-  # DB subnet group
-  subnet_ids = ["subnet-12345678", "subnet-87654321"]
-
-  # DB parameter group
-  family = "mysql5.7"
-
-  # DB option group
-  major_engine_version = "5.7"
+  tags = local.common_tags
 
   # Database Deletion Protection
   deletion_protection = true
@@ -143,23 +130,17 @@ module "db" {
       value = "utf8mb4"
     }
   ]
+  # Disable creation of option group - provide an option group or default AWS default
+  create_db_option_group = false
 
-  options = [
-    {
-      option_name = "MARIADB_AUDIT_PLUGIN"
+  # Disable creation of parameter group - provide a parameter group or default to AWS default
+  create_db_parameter_group = false
 
-      option_settings = [
-        {
-          name  = "SERVER_AUDIT_EVENTS"
-          value = "CONNECT"
-        },
-        {
-          name  = "SERVER_AUDIT_FILE_ROTATIONS"
-          value = "37"
-        },
-      ]
-    },
-  ]
+  # Disable creation of subnet group - provide a subnet group
+  create_db_subnet_group = true
+
+  # Disable creation of monitoring IAM role
+  create_monitoring_role = false
+
 }
 
-*/
