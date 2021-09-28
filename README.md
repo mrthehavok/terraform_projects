@@ -12,10 +12,5 @@ Create RDS instance in DB subnet.
 
 ```
 1. Export AWS_ACCESS_KEY_ID ,  AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION.
-2. globalvars
-3. SSM
-4. IAM
-5. network
-6. vpc/public
-7. RDS
+2. Run with folder order
 ```
