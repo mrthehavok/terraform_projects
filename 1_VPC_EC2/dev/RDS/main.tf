@@ -98,7 +98,7 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${local.environment}PostgreSQL"
+  name     = "${local.environment}_PostgreSQL"
   username = "root"
   password = local.ssm_password
   port     = "5432"
@@ -118,7 +118,7 @@ module "db" {
   tags = local.common_tags
 
   # Database Deletion Protection
-  deletion_protection = true
+  deletion_protection = false
 
   parameters = [
     {
