@@ -84,7 +84,7 @@ resource "aws_security_group" "bastion_host" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge (local.common_tags , {Name = "Bastion SG"})
+  tags = merge (local.common_tags , {Name = " ${local.common_tags["Environment"]} Bastion SG"})
 }
 
 
