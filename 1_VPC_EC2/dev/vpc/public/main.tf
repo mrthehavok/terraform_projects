@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------------------------
 #
-#                                Create servers in public subnets
+#                    Create blue/green deployment and bastion in public subnets
 #
 #------------------------------------------------------------------------------------------------
 
@@ -33,6 +33,19 @@ data "terraform_remote_state" "network" {
     region = "eu-central-1"
   }
 }
+#------------------------------------------------------------------------------------------------
+
+// Get latest AMI for bastion
+data "aws_ami" "latest_amazon_linux" {
+  owners      = ["amazon"]
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
+#------------------------------------------------------------------------------------------------
 
 locals {
   company_name  = data.terraform_remote_state.global.outputs.company_name
@@ -44,7 +57,8 @@ locals {
 }
 
 #------------------------------------------------------------------------------------------------
-
+#                                         Create blue/green deployment
+#------------------------------------------------------------------------------------------------
 
 module "asg_web" {
   source = "github.com/mrthehavok/terraform_modules/modules/aws_ec2_asg/"
@@ -57,15 +71,8 @@ module "asg_web" {
 }
 
 #------------------------------------------------------------------------------------------------
-
-data "aws_ami" "latest_amazon_linux" {
-  owners      = ["amazon"]
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
-}
+#                                        Create bastion host.
+#------------------------------------------------------------------------------------------------
 
 
 resource "aws_security_group" "bastion_host" {
