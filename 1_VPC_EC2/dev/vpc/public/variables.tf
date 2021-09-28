@@ -13,5 +13,5 @@ variable "max_asg_size" {
 }
 
 variable "des_asg_size" {
-  default = 4
+  default = 2
 }
