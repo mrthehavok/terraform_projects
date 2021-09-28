@@ -22,6 +22,7 @@ locals {
   company_name  = data.terraform_remote_state.global.outputs.company_name
   region_name   = data.terraform_remote_state.global.outputs.region_name
   common_tags   = data.terraform_remote_state.global.outputs.common_tags
+  environment   = data.terraform_remote_state.global.outputs.env
 }
 
 #------------------------------------------------------------------------------------------------
@@ -35,7 +36,7 @@ resource "random_string" "rds_password" {
 
 // Store Password in SSM Parameter Store
 resource "aws_ssm_parameter" "rds_password" {
-  name        = "/dev/PostgreSQL"
+  name        = "/${local.environment}/PostgreSQL"
   description = "Master Password for RDS PostgreSQL"
   type        = "SecureString"
   value       = random_string.rds_password.result
@@ -45,6 +46,6 @@ resource "aws_ssm_parameter" "rds_password" {
 
 // Get Password from SSM Parameter Store
 data "aws_ssm_parameter" "my_rds_password" {
-  name       = "/dev/PostgreSQL"
+  name       = "/${local.environment}/PostgreSQL"
   depends_on = [aws_ssm_parameter.rds_password]
 }

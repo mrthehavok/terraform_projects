@@ -43,11 +43,14 @@ data "terraform_remote_state" "network" {
 #------------------------------------------------------------------------------------------------
 
 locals {
-  company_name  = data.terraform_remote_state.global.outputs.company_name
-  region_name   = data.terraform_remote_state.global.outputs.region_name
-  common_tags   = data.terraform_remote_state.global.outputs.common_tags
-  environment   = data.terraform_remote_state.global.outputs.env
-  ssm_password   = data.terraform_remote_state.SSM.outputs.rds_password
+  company_name      = data.terraform_remote_state.global.outputs.company_name
+  region_name       = data.terraform_remote_state.global.outputs.region_name
+  common_tags       = data.terraform_remote_state.global.outputs.common_tags
+  environment       = data.terraform_remote_state.global.outputs.env
+  ssm_password      = data.terraform_remote_state.SSM.outputs.rds_password
+  vpc_id            = data.terraform_remote_state.network.outputs.vpc_id
+  db_subnet_id      = data.terraform_remote_state.network.outputs.db_subnet_id
+  vpc_cidr_block    = data.terraform_remote_state.network.outputs.vpc_cidr_block
 }
 
 
@@ -57,9 +60,9 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
-  name        = " ${locals.environment}-DB-SG"
+  name        = " ${local.environment}-DB-SG"
   description = " PostgreSQL  security group"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = local.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -68,13 +71,15 @@ module "security_group" {
       to_port     = 5432
       protocol    = "tcp"
       description = "PostgreSQL access from within VPC"
-      cidr_blocks = module.vpc.vpc_cidr_block
+      cidr_blocks = local.vpc_cidr_block
     },
   ]
 
   tags = local.common_tags
 }
 
+
+/*
 #------------------------------------------------------------------------------------------------
 
 module "db" {
@@ -156,3 +161,5 @@ module "db" {
     },
   ]
 }
+
+*/
