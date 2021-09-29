@@ -4,23 +4,20 @@
 #
 #------------------------------------------------------------------------------------------------
 
-provider "aws" {}
-
-
 terraform {
   backend "s3" {
-    bucket  =   "mrthehavok.test.cli"
-    key     =   "VPC_EC2/dev/SSM/terraform.tfstate"
-    region  =   "eu-central-1"
+    bucket  =   var.bucket_name
+    key     =   "${var.project_name}/dev/SSM/terraform.tfstate"
+    region  =   var.bucket_region
   }
 }
 
 data "terraform_remote_state" "global" {
   backend = "s3"
   config = {
-    bucket = "mrthehavok.test.cli"
-    key    = "VPC_EC2/globalvars/terraform.tfstate"
-    region = "eu-central-1"
+    bucket = var.bucket_name
+    key    = "${var.project_name}/globalvars/terraform.tfstate"
+    region = var.bucket_region
   }
 }
 

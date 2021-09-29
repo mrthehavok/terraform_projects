@@ -4,13 +4,11 @@
 #
 #------------------------------------------------------------------------------------------------
 
-provider "aws" {}
-
 terraform {
   backend "s3" {
-    bucket = "mrthehavok.test.cli"
-    key    = "VPC_EC2/globalvars/terraform.tfstate"
-    region = "eu-central-1"
+    bucket = var.bucket_name
+    key    = "${var.project_name}/globalvars/terraform.tfstate"
+    region = var.bucket_region
   }
 }
 
@@ -34,5 +32,5 @@ output "common_tags" {
 }
 
 output "region_name" {
-  value = "eu-west-1"
+  value = var.region_name
 }
