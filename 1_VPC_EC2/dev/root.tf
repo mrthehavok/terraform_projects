@@ -13,6 +13,7 @@ module "IAM" {
   source = "./modules/2_IAM"
 }
 
+/*
 module "SSM" {
   source = "./modules/3_SSM"
 }
@@ -29,3 +30,5 @@ module "blue_green" {
 module "RDS" {
   source = "./modules/6_RDS"
 }
+
+*/

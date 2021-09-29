@@ -39,3 +39,16 @@ variable "db_admin_group_name" {
 variable "db_dev_group_name" {
   default = "db_developers"
 }
+
+
+variable "bucket_name" {
+  default = "mrthehavok.test.cli"
+}
+
+variable "region_name" {
+  default = "eu-west-1"
+}
+
+variable "central" {
+  default = "Alpha"
+}
