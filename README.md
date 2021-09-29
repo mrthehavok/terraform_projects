@@ -11,6 +11,6 @@ Create RDS instance in DB subnet.
 ### Instruction
 
 ```
-1. Export AWS_ACCESS_KEY_ID ,  AWS_SECRET_ACCESS_KEY and AWS_DEFAULT_REGION.
-2. Run with folder order
+1. Export AWS_PROFILE
+2. Run root.tf with required environment
 ```
