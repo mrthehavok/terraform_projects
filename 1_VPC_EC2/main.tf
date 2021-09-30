@@ -12,6 +12,10 @@ terraform {
 }
 
 
+locals {
+  public_subnets= module.vpc.public_subnets
+}
+
 module "IAM" {
   source          = "./modules/IAM"
 }
@@ -24,6 +28,7 @@ module "SSM" {
 
 module "vpc" {
   source          = "./modules/network"
+  cidr_block =      var.cidr_block
   azs             = var.azs
   public_subnets  = var.public_subnets
   private_subnets = var.private_subnets
@@ -32,15 +37,25 @@ module "vpc" {
   environment     = var.environment
 }
 
+
 /*
 module "ec2" {
   source          = "./modules/VPC/public"
   des_asg_size  = var.des_asg_size
   max_asg_size  = var.max_asg_size
   min_asg_size  = var.min_asg_size
-  subnet_id     = module.vpc.public_subnets
+  subnet_id     = [local.public_subnets]
   vpc_id        = module.vpc.vpc_id
   common_tags   = var.common_tags
   key_name      = var.key_name
+}
+
+
+
+module "RDS" {
+  source          = "./modules/RDS"
+  vpc_id          = module.vpc.vpc_id
+#  subnet_ids      = module.vpc.database_subnets
+
 }
 */

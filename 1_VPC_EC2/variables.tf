@@ -103,3 +103,14 @@ variable "backup_window" {
 variable "character_set" {
   default = "utf8mb4"
 }
+
+
+variable "ssm_password" {
+  default = ""
+}
+
+variable "subnet_ids" {
+  default = ""
+}
+
+

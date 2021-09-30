@@ -25,7 +25,7 @@ module "asg_web" {
   des_asg_size  = var.des_asg_size
   max_asg_size  = var.max_asg_size
   min_asg_size = var.min_asg_size
-  subnet_id     = var.subnets
+  subnet_id     = var.subnet_id
   vpc_id        = var.vpc_id
   common_tags = var.common_tags
 }
@@ -67,7 +67,7 @@ module "ec2_instance" {
   instance_type          = (var.environment == "PROD" ? "t2.small" : "t2.micro")
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.bastion_host.id]
-  subnet_id              = var.subnets[0]
+  subnet_id              = var.subnet_id[0]
 
   tags = var.common_tags
 }

@@ -7,7 +7,7 @@ common_tags         = {
                         Project     = "Alpha"
                         Created     = "By Terraform"
                         Owner       = "idmitriev"
-                        Environment = "Development"
+                        Environment = "Production"
                         }
 company_name        = "HashiCorp"                        
 environment         = "PROD"

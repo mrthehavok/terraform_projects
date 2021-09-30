@@ -3,6 +3,45 @@
 #                                  Variables for RDS.
 #
 #------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
+#                                         Global variables
+#------------------------------------------------------------------------------------------------
+variable "environment" {
+  default = "DEV"
+}
+
+variable "cidr_block" {
+  default = "10.0.0.0/16"
+}
+
+variable "common_tags" {
+    default = {
+                        Project     = "Alpha"
+                        Created     = "By Terraform"
+                        Owner       = "idmitriev"
+                        Environment = "Development"
+                        
+    }
+}
+
+
+
+#------------------------------------------------------------------------------------------------
+#                                         RDS variables
+#------------------------------------------------------------------------------------------------
+variable "ssm_password" {
+  default = ""
+}
+
+variable "db_subnet_id" {
+  default = ""
+}
+
+
+variable "vpc_id" {
+  default = ""
+}
+
 
 variable "engine" {
   default = "postgres"

@@ -30,7 +30,7 @@ variable "environment" {
 }
 
 variable "company_name" {
-  default = "ATC"
+  default = "HashiCorp"
 }
 
 

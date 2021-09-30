@@ -20,7 +20,7 @@ variable "vpc_id" {
   default = ""
 }
 
-variable "subnets" {
+variable "subnet_id" {
   default = ""
 }
 
@@ -38,4 +38,6 @@ variable "key_name" {
   default = "idmitriev-key-ireland.pem"
 }
 
-
+variable "environment" {
+  default = "DEV"
+}

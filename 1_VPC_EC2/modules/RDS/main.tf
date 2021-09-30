@@ -6,9 +6,9 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
-  name        = " ${local.environment}-DB-SG"
+  name        = " ${var.environment}-DB-SG"
   description = " ${var.engine}  security group"
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -17,11 +17,11 @@ module "security_group" {
       to_port     = var.db_port
       protocol    = "tcp"
       description = "${var.engine} access from within VPC"
-      cidr_blocks = local.vpc_cidr_block
+      cidr_blocks = var.cidr_block
     },
   ]
 
-  tags = local.common_tags
+  tags = var.common_tags
 }
 
 
@@ -33,7 +33,7 @@ module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 3.0"
 
-#  identifier = "${local.environment}-DB"
+#  identifier = "${var.environment}-DB"
   identifier = "dev-db"
   engine               = "${var.engine}"
   engine_version       = "11.10"
@@ -45,16 +45,16 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${local.environment}_${var.engine}"
+  name     = "${var.environment}_${var.engine}"
   username = var.db_username
-  password = local.ssm_password
+  password = var.ssm_password
   port     = var.db_port
 
   iam_database_authentication_enabled = true
 
 
   multi_az               = false
-  subnet_ids             = local.db_subnet_id
+  subnet_ids             = [var.db_subnet_id]
   vpc_security_group_ids = [module.security_group.security_group_id]
 
 
@@ -62,7 +62,7 @@ module "db" {
   backup_window      = var.backup_window
 
 
-  tags = local.common_tags
+  tags = var.common_tags
 
   # Database Deletion Protection
   deletion_protection = false
