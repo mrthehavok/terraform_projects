@@ -13,7 +13,8 @@ terraform {
 
 
 locals {
-  public_subnets= module.vpc.public_subnets
+  public_subnets  = module.vpc.public_subnets
+  identifier      = lower("${var.environment}-${var.engine}-db")
 }
 
 module "IAM" {
@@ -58,4 +59,5 @@ module "RDS" {
   subnet_ids      = module.vpc.database_subnets
   common_tags     = var.common_tags
   ssm_password    = module.SSM.rds_password
+  identifier      = local.identifier
 }

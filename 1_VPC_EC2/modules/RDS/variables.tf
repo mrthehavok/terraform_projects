@@ -37,6 +37,9 @@ variable "subnet_ids" {
   default = ""
 }
 
+variable "identifier" {
+  default = "dev-db"
+}
 
 variable "vpc_id" {
   default = ""

@@ -33,8 +33,8 @@ module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 3.0"
 
-#  identifier = "${var.environment}-DB"
-  identifier = "dev-db"
+  identifier = var.identifier
+#  identifier = "dev-db"
   engine               = "${var.engine}"
   engine_version       = "11.10"
   family               = "postgres11" # DB parameter group
@@ -45,7 +45,7 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${var.environment}_${var.engine}"
+  name     = var.identifier
   username = var.db_username
   password = var.ssm_password
   port     = var.db_port
