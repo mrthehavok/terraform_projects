@@ -6,6 +6,10 @@ variable "environment" {
   default = "DEV"
 }
 
+variable "region_name" {
+  default = "eu-west-1"
+}
+
 variable "common_tags" {
     default = {
                         Project     = "Alpha"
@@ -39,4 +43,32 @@ variable "public_subnets" {
 
 variable "database_subnets" {
   default = ["10.0.21.0/24","10.0.22.0/24"]
+}
+
+#------------------------------------------------------------------------------------------------
+#                                         Servers variables
+#------------------------------------------------------------------------------------------------
+
+variable "min_asg_size" {
+  default = 1
+}
+
+variable "max_asg_size" {
+  default = 3
+}
+
+variable "des_asg_size" {
+  default = 2
+}
+
+variable "vpc_id" {
+  default = ""
+}
+
+variable "subnets" {
+  default = ""
+}
+
+variable "key_name" {
+  default = "idmitriev-key-ireland.pem"
 }
