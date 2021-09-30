@@ -32,7 +32,7 @@ output "ARN_dev2" {
 
 
 output "rds_password" {
-  value = data.SSM.rds_password
+  value = module.SSM.rds_password
   sensitive = true
 }
 
