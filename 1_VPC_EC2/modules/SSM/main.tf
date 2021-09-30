@@ -22,7 +22,7 @@ resource "aws_ssm_parameter" "rds_password" {
 
 
 // Get Password from SSM Parameter Store
-data "aws_ssm_parameter" "my_rds_password" {
+data "aws_ssm_parameter" "rds_password" {
   name       = "/${var.environment}/RDS"
   depends_on = [aws_ssm_parameter.rds_password]
 }

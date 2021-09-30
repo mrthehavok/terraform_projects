@@ -54,7 +54,7 @@ module "db" {
 
 
   multi_az               = false
-  subnet_ids             = [var.db_subnet_id]
+  subnet_ids             = var.subnet_ids
   vpc_security_group_ids = [module.security_group.security_group_id]
 
 

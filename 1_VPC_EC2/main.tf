@@ -49,13 +49,13 @@ module "ec2" {
   common_tags   = var.common_tags
   key_name      = var.key_name
 }
-
+*/
 
 
 module "RDS" {
   source          = "./modules/RDS"
   vpc_id          = module.vpc.vpc_id
-#  subnet_ids      = module.vpc.database_subnets
-
+  subnet_ids      = module.vpc.database_subnets
+  common_tags     = var.common_tags
+  ssm_password    = module.SSM.rds_password
 }
-*/

@@ -33,7 +33,7 @@ variable "ssm_password" {
   default = ""
 }
 
-variable "db_subnet_id" {
+variable "subnet_ids" {
   default = ""
 }
 
