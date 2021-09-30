@@ -1,24 +1,29 @@
 provider "aws" {
-  region    =   var.region_name
+#  region    =   var.region_name
+}
+
+terraform {
+  backend "s3" {
+    bucket = "mrthehavok.test.cli"
+    key    = "Alpha/terraform.tfstate"
+    region = "eu-central-1"
+  }
 }
 
 
-
-
-module "global_vars" {
-  source = "./modules/1_globalvars"
-}
 
 module "IAM" {
-  source = "./modules/2_IAM"
+  source          = "./modules/2_IAM"
+}
+
+
+module "SSM" {
+  source = "./modules/3_SSM"
+  common_tags = var.common_tags
+  environment = var.environment
 }
 
 /*
-module "SSM" {
-  source = "./modules/3_SSM"
-}
-
-
 module "network" {
   source = "./modules/4_network"
 }

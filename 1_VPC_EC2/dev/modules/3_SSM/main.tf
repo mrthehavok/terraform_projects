@@ -3,7 +3,7 @@
 #                                       Create password for RDS
 #
 #------------------------------------------------------------------------------------------------
-
+/*
 terraform {
   backend "s3" {
     bucket  =   var.bucket_name
@@ -29,7 +29,7 @@ locals {
   common_tags   = data.terraform_remote_state.global.outputs.common_tags
   environment   = data.terraform_remote_state.global.outputs.env
 }
-
+*/
 #------------------------------------------------------------------------------------------------
 
 // Generate Password
@@ -41,16 +41,16 @@ resource "random_string" "rds_password" {
 
 // Store Password in SSM Parameter Store
 resource "aws_ssm_parameter" "rds_password" {
-  name        = "/${local.environment}/RDS"
+  name        = "/${var.environment}/RDS"
   description = "Master Password for RDS "
   type        = "SecureString"
   value       = random_string.rds_password.result
-  tags        = local.common_tags
+  tags        = var.common_tags
 }
 
 
 // Get Password from SSM Parameter Store
 data "aws_ssm_parameter" "my_rds_password" {
-  name       = "/${local.environment}/RDS"
+  name       = "/${var.environment}/RDS"
   depends_on = [aws_ssm_parameter.rds_password]
 }

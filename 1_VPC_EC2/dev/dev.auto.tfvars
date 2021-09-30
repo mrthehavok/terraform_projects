@@ -9,4 +9,4 @@ common_tags         = {
                         Environment = "Development"
                         }
 company_name        = "HashiCorp"                        
-env                 = "DEV"
+environment         = "DEV"

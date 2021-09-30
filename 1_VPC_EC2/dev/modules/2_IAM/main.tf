@@ -4,6 +4,7 @@
 #
 #------------------------------------------------------------------------------------------------
 
+/*
 terraform {
   backend "s3" {
     bucket  =   var.bucket_name
@@ -21,13 +22,14 @@ data "terraform_remote_state" "global" {
   }
 }
 
+
 locals {
   company_name  = data.terraform_remote_state.global.outputs.company_name
   region_name   = data.terraform_remote_state.global.outputs.region_name
   common_tags   = data.terraform_remote_state.global.outputs.common_tags
   environment   = data.terraform_remote_state.global.outputs.env
 }
-
+*/
 
 #------------------------------------------------------------------------------------------------
 #                                         Users
