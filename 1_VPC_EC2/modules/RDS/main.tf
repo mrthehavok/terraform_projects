@@ -1,59 +1,3 @@
-#------------------------------------------------------------------------------------------------
-#
-#                                       Create security group for RDS and RDS
-#
-#------------------------------------------------------------------------------------------------
-
-terraform {
-  backend "s3" {
-    bucket  =   var.bucket_name
-    key     =   "${var.project_name}/dev/RDS/terraform.tfstate"
-    region  =   var.bucket_region
-  }
-}
-
-#------------------------------------------------------------------------------------------------
-
-data "terraform_remote_state" "global" {
-  backend = "s3"
-  config = {
-    bucket = var.bucket_name
-    key    = "${var.project_name}/globalvars/terraform.tfstate"
-    region = var.bucket_region
-  }
-}
-
-data "terraform_remote_state" "SSM" {
-  backend = "s3"
-  config = {
-    bucket = var.bucket_name
-    key    = "${var.project_name}/dev/SSM/terraform.tfstate"
-    region = var.bucket_region
-  }
-}
-
-data "terraform_remote_state" "network" {
-  backend = "s3"
-  config = {
-    bucket = var.bucket_name
-    key    = "${var.project_name}/dev/network/terraform.tfstate"
-    region = var.bucket_region
-  }
-}
-
-#------------------------------------------------------------------------------------------------
-
-locals {
-  company_name      = data.terraform_remote_state.global.outputs.company_name
-  region_name       = data.terraform_remote_state.global.outputs.region_name
-  common_tags       = data.terraform_remote_state.global.outputs.common_tags
-  environment       = data.terraform_remote_state.global.outputs.env
-  ssm_password      = data.terraform_remote_state.SSM.outputs.rds_password
-  vpc_id            = data.terraform_remote_state.network.outputs.vpc_id
-  db_subnet_id      = data.terraform_remote_state.network.outputs.db_subnet_id
-  vpc_cidr_block    = data.terraform_remote_state.network.outputs.vpc_cidr_block
-}
-
 
 #------------------------------------------------------------------------------------------------
 #                                         Security Group for RDS
@@ -62,9 +6,9 @@ module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4"
 
-  name        = " ${local.environment}-DB-SG"
+  name        = " ${var.environment}-DB-SG"
   description = " ${var.engine}  security group"
-  vpc_id      = local.vpc_id
+  vpc_id      = var.vpc_id
 
   # ingress
   ingress_with_cidr_blocks = [
@@ -73,11 +17,11 @@ module "security_group" {
       to_port     = var.db_port
       protocol    = "tcp"
       description = "${var.engine} access from within VPC"
-      cidr_blocks = local.vpc_cidr_block
+      cidr_blocks = var.cidr_block
     },
   ]
 
-  tags = local.common_tags
+  tags = var.common_tags
 }
 
 
@@ -89,8 +33,8 @@ module "db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "~> 3.0"
 
-#  identifier = "${local.environment}-DB"
-  identifier = "dev-db"
+  identifier = var.identifier
+#  identifier = "dev-db"
   engine               = "${var.engine}"
   engine_version       = "11.10"
   family               = "postgres11" # DB parameter group
@@ -101,16 +45,16 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = "${local.environment}_${var.engine}"
+  name     = "${var.environment}DB"
   username = var.db_username
-  password = local.ssm_password
+  password = var.ssm_password
   port     = var.db_port
 
   iam_database_authentication_enabled = true
 
 
   multi_az               = false
-  subnet_ids             = local.db_subnet_id
+  subnet_ids             = var.subnet_ids
   vpc_security_group_ids = [module.security_group.security_group_id]
 
 
@@ -118,7 +62,7 @@ module "db" {
   backup_window      = var.backup_window
 
 
-  tags = local.common_tags
+  tags = var.common_tags
 
   # Database Deletion Protection
   deletion_protection = false
@@ -146,4 +90,3 @@ module "db" {
   create_monitoring_role = false
 
 }
-

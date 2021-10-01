@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------------------------
 #
-#                                       Outputs with web URL
+#                                       Outputs for RDS 
 #
 #------------------------------------------------------------------------------------------------
 
-
-output "DNS_name" {
-  value = module.asg_web.web_LB_url
+output "rds_password" {
+  value = data.aws_ssm_parameter.rds_password.value
+  sensitive = true
 }

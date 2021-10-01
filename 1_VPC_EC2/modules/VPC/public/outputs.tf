@@ -1,17 +1,10 @@
 #------------------------------------------------------------------------------------------------
 #
-#                                      Variables for ASG size
+#                                       Outputs with web URL
 #
 #------------------------------------------------------------------------------------------------
 
-variable "min_asg_size" {
-  default = 1
-}
 
-variable "max_asg_size" {
-  default = 3
-}
-
-variable "des_asg_size" {
-  default = 2
+output "web_LB_url" {
+  value = module.asg_web.web_LB_url
 }
