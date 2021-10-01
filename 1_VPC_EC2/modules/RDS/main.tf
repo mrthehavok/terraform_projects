@@ -45,7 +45,7 @@ module "db" {
   max_allocated_storage = 20
   storage_encrypted     = false
 
-  name     = var.identifier
+  name     = "${var.environment}DB"
   username = var.db_username
   password = var.ssm_password
   port     = var.db_port
