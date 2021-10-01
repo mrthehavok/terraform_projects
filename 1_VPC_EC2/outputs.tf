@@ -59,3 +59,20 @@ output "database_subnets" {
   value = module.vpc.database_subnets	
 }
 
+#------------------------------------------------------------------------------------------------
+#                                         RDS
+#------------------------------------------------------------------------------------------------
+
+output "db_instance_address" {
+  value = module.RDS.db_instance_address		
+}
+
+
+output "db_instance_port" {
+  value = module.RDS.db_instance_port		
+}
+
+
+output "db_instance_name" {
+  value = module.RDS.db_instance_name		
+}
